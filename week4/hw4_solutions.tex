@@ -1,0 +1,540 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+%\usepackage{palatino}
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{enumerate}
+\usepackage{listings}  % Use this for better code formatting
+%\usepackage{amssymb}
+%\usepackage{xcolor} 
+\usepackage{graphicx}    
+\usepackage[svgnames]{xcolor} 
+
+%\usepackage{sectsty} % Allows customizing section commands
+%\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+ \usepackage{setspace} 
+ 
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{.1cm plus4mm minus3mm}
+
+
+%--- color definitions for code listings
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+
+% commands I use to typeset matrices in bold
+\newcommand{\matLambda}{\mathbf{\Lambda}}
+\newcommand{\matSigma}{\mathbf{\Sigma}}
+\newcommand{\vecBeta}{\mathbf{\beta}}
+\newcommand{\vecEpsilon}{\mathbf{\epsilon}}
+\newcommand{\vecMu}{\mathbf{\mu}}
+\newcommand{\vecY}{\mathbf{y}}
+\newcommand{\matA}{\mathbf{A}}
+\newcommand{\matB}{\mathbf{B}}
+\newcommand{\matC}{\mathbf{C}}
+\newcommand{\matI}{\mathbf{I}}
+\newcommand{\matP}{\mathbf{P}}
+\newcommand{\matS}{\mathbf{S}}
+\newcommand{\matV}{\mathbf{V}}
+\newcommand{\matQ}{\mathbf{Q}}
+\newcommand{\matX}{\mathbf{X}}
+\newcommand{\matY}{\mathbf{Y}}
+\newcommand{\matW}{\mathbf{W}}
+
+
+
+%\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+%\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+%\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+%\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+%\textsc{stat 8004} \\ [25pt] 
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge STAT 8004, Assignment 4 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{David Dobor} 
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\lstset{ %
+  language=R,                     % the language of the code
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{WhiteSmoke},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{Gray},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{DarkSlateBlue},      % keyword style
+  commentstyle=\color{ForestGreen},   % comment style
+  stringstyle=\color{mymauve},      % string literal style
+  %escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,det,...}            % if you want to add more keywords to the set
+} 
+
+\renewcommand{\ttdefault}{pcr}  %to be able to use bold fonts in lstlistings code
+
+\begin{document}
+
+\maketitle 
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+\subsection*{Question 1}
+In the context of Problem 2 of Homework Assignment 3, use \texttt{R} matrix 
+calculations to do the following in the (non-full-rank) Gauss-Markov normal linear 
+model
+
+
+\begin{enumerate}[(a)]
+\item Find 90\% two-sided confidence limits for $\sigma$.
+
+\item Find 90\% two-sided confidence limits for $\mu + \tau_2$.
+
+\item Find 90\% two-sided confidence limits for $\tau_1 -  \tau_2$.
+
+\item Find a $p$-value for testing the null hypothesis $H_0 \ : \tau_1 -  \tau_2 = 0 \ $ vs $\ H_a \ : \text{ not } \ H_0$.
+
+\item Find 90\% two-sided prediction limits for the sample mean of $ n = 10$ future observations from
+the first set of conditions.
+
+\item Find 90\% two-sided prediction limits for the difference between a pair of future values, one
+from the first set of conditions (i.e. with mean  $\mu + \tau_1$ ) and one from the second set of conditions
+(i.e. with mean  $\mu + \tau_2$).
+
+\item Find a $p$-value for testing $H_0 \ : \ 
+\begin{bmatrix} 0 & 1 & -1 & 0 & 0 \\
+                             0 & 1 & 0 & -1 & 0 \\
+                             0 & 1 & 0 & 0 & -1
+\end{bmatrix}
+\begin{bmatrix} \mu\\
+                             \tau_1\\
+                             \tau_2\\
+                             \tau_3\\
+                             \tau_4
+\end{bmatrix}
+=
+\begin{bmatrix} 0\\
+                             0\\
+                             0
+\end{bmatrix}
+$. What is the practical interpretation of this test?
+
+\item Find a $p$-value for testing $H_0 \ : \ 
+\begin{bmatrix} 0 & 1 & -1 & 0 & 0 \\
+                             0 & 0 & 1 & -1 & 0 \\
+\end{bmatrix}
+\begin{bmatrix} \mu\\
+                             \tau_1\\
+                             \tau_2\\
+                             \tau_3\\
+                             \tau_4
+\end{bmatrix}
+=
+\begin{bmatrix} 10\\
+                             0
+\end{bmatrix}
+$. 
+\end{enumerate}
+\bigskip
+\subsubsection*{Answer to Question 1}
+The context is the one-way \texttt{ANOVA} Gauss-Markov model  $y_{ij} = \mu + \tau_i + \epsilon_{ij}$ 
+for the $j$th  individual of the $i$th group  (4 groups with sample sizes  2, 1, 1, 2 for groups, respectively)
+as follows:
+$$
+\begin{bmatrix} 
+2\\ 1\\ 4 \\ 6 \\ 3\\ 5  
+\end{bmatrix}
+=
+\begin{bmatrix} 1 & 1 & 0 & 0 & 0 \\
+                             1 & 1 & 0 & 0 & 0 \\
+                             1 & 0 & 1 & 0 & 0\\
+                             1 & 0 & 0 & 1 & 0 \\
+                             1 & 0 & 0 & 0 & 1\\
+                             1 & 0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix} 
+\mu \\ \tau_1\\ \tau_2 \\ \tau_3 \\ \tau_4 \\ 
+\end{bmatrix}
++ 
+\begin{bmatrix} 
+\epsilon_{1 1 } \\ \epsilon_{1 2}\\ \epsilon_{2 1} \\ \epsilon_{3 1} \\ \epsilon_{4 1} \\\epsilon_{42}  
+\end{bmatrix}
+$$
+%----------------------------------------------------------------------------------------
+%	ANSWER TO PROBLEM 1
+%----------------------------------------------------------------------------------------
+\begin{enumerate}[(a)]
+\item With $n = 6$ observations and the design matrix being of rank 4, we find that 
+
+$$\frac{\text{SSE}}{ \sigma^2}  \sim \chi^2_{n - \text{rank(X)}} = \chi^2_{2}.$$
+That is
+$$
+P \left(\frac{\text{SSE}}{\text{upper  0.05 } \text{qt of }\chi^2_{2} }  <  \sigma^2 < \frac{\text{SSE}}{\text{lower  0.05 } \text{qt of }\chi^2_{2}}  \right) = 0.9.
+$$\\
+\begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+# compute sum of squared errors
+beta.hat <- ginv(t(X) %*% X) %*% t(X) %*% Y
+Y.hat <- X %*% beta.hat;  
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat) # ans: 2.5
+
+# compute the endpoints for the 90% confidence interval
+lower.limit <- SSE / qchisq(0.95, 2)  # ans: 0.4172603
+upper.limit <- SSE / qchisq(0.05, 2)  # ans: 24.36966
+
+c(sqrt(lower.limit), sqrt(upper.limit))
+#ans: 0.6459568 4.9365633
+\end{lstlisting}
+The 90\% confidence interval for $\sigma$ is given by:
+\boxed{
+$$
+\left( 0.6459\ , \ 4.9366\right)
+$$
+}\\
+
+\pagebreak
+
+\item  Here $c^T = (1, 0, 1, 0, 0)$ (we have $c^T \vecBeta = \mu + \tau_2$). We note that 
+ $c^T \vecBeta$ is an estimable function ($c^T$ is the third row of $X$) and compute the
+ two sided 90\% confidence interval as follows:\\
+ 
+ \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+c <- matrix(c(1, 0, 1, 0, 0), 5, 1)
+c.beta.hat <- t(c) %*% beta.hat    #= 4
+
+MSE <- SSE / (n - rank.X)  
+df <- n - rank.X
+
+# 90% two sided confidence interval
+c.beta.hat + 
+    c(-1, 1) * qt(.95, df) * sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
+#ans:  0.7353569 7.2646431
+\end{lstlisting}
+
+ The 90\% confidence interval for $\mu + \tau_2$ is given by:
+\boxed{
+$$
+\left( 0.7353569\ , \  7.2646431\right)
+$$
+}\\
+ \\
+ 
+
+\item  Here $c^T = (0, 1, -1, 0, 0)$ (we have $c^T \vecBeta = \tau_1 - \tau_2$). We note that 
+ $c^T \vecBeta$ is an estimable function ($c^T$ is ( row 2 - row 3 ) of $X$  ) and compute the
+ two sided 90\% confidence interval as follows:\\
+ 
+ \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+c <- matrix(c(0, 1, -1, 0, 0), 5, 1)
+c.beta.hat <- t(c) %*% beta.hat    #= -2.5
+
+# 90% two sided confidence interval
+c.beta.hat + 
+    c(-1, 1) * qt(.95, df) * sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
+#ans:  -3.998355  3.998355
+\end{lstlisting}
+
+ The 90\% confidence interval for $\tau_1 - \tau_2$ is given by:
+\boxed{
+$$
+\left(-3.998355\ , \  3.998355\right)
+$$
+}\\
+ \\
+ 
+ 
+ 
+\item Here
+$$
+H_0 \ : \ 
+\begin{bmatrix} 0 & 1 & -1 & 0 & 0 
+\end{bmatrix}
+\begin{bmatrix} \mu\\
+                             \tau_1\\
+                             \tau_2\\
+                             \tau_3\\
+                             \tau_4
+\end{bmatrix}
+= \ 0
+$$ 
+And we compute the following $F$ ratio
+$$
+F = \frac{\text{SSH}_0 \ / 1 }{ \text{SSE }  / \ 2 } = \frac{\text{MSH}_0 }{ \text{MSE } } 
+$$
+as follows:
+ \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+c.beta.hat <- c %*% beta.hat    #= -2.5
+
+# sum of squares under the null (numerator in the F test):
+SSH <- 
+    t(c.beta.hat) %*% ginv( (c %*% XtXi %*% t(c)) )  %*% c.beta.hat
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat) 
+
+MSH <- SSH
+MSE <- SSE / (n - rank.X) 
+
+# the F ratio
+F <- MSH / MSE
+
+1 - pf(F, 1, 2)   #ans: 0.2094306
+\end{lstlisting}
+
+The $p$-value here is \ \fbox{0.2094306}\\
+
+
+\item
+\item
+
+\item The practical interpretation here is that the effects for groups 2, 3, and 4 (the values $\tau_1, \tau_2, \tau_3$) are not that different 
+from the effect for group 1 ($\tau_1$). 
+
+Parts (g) and (h) are similar to (d) and we only present the \texttt{R} code and results.
+ \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+C <- t(matrix(c(0, 1, -1, 0, 0,
+                0, 1, 0, -1, 0,
+                0, 1, 0, 0, -1), nrow=5, ncol=3))
+
+C.beta.hat <- C %*% beta.hat 
+
+# sum of squares under the null (numerator in the F test):
+SSH <- 
+    t(C.beta.hat) %*% ginv( (C %*% XtXi %*% t(C)) )  %*% C.beta.hat 
+
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat) 
+
+MSH <- SSH
+MSE <- SSE / (n - rank.X) 
+
+# the F ratio
+F <- MSH / MSE
+
+1 - pf(F, 1, 2)   #ans: 0.0741799
+\end{lstlisting}
+
+The $p$-value is \ \fbox{0.0741799}\\
+
+
+\item   The $p$ value obtained here is really small: \fbox{0.006715993}\ , and we are able to reject the null more comfortably. This is not surprising, considering 
+that the first hypothesis says $\tau_1 - \tau_2 = 10$. One would hardly expect such difference in the 
+$\tau_1$ and $\tau_2$ effects given the observed responses in the two groups.\\
+
+The code follows:\\
+ 
+ \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+C <- t(matrix(c(0, 1, -1, 0, 0,
+                0, 0, 1, -1, 0), nrow=5, ncol=2))
+d <- matrix(c(10,0))
+
+u <- C %*% beta.hat - d
+
+# sum of squares under the null (numerator in the F test):
+SSH <- 
+    t(u) %*% ginv( (C %*% XtXi %*% t(C)) )  %*% u 
+
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat) 
+
+MSH <- SSH
+MSE <- SSE / (n - rank.X) 
+
+# the F ratio
+F <- MSH / MSE
+
+1 - pf(F, 1, 2)   #ans: 0.006715993
+\end{lstlisting}
+
+\end{enumerate}
+
+\bigskip
+\bigskip
+%----------------------------------------------------------------------------------------
+%	PROBLEM 2
+%----------------------------------------------------------------------------------------
+\subsection*{Question 2}
+In the following, make use of the data in Problem 4 of Homework Assignment 3. 
+Consider a regression of $y$ on $x_1, x_2, \ldots, x_5$. Use \texttt{R} matrix 
+calculation to do the following in a full rank Gauss-Markov normal linear model.\\
+
+
+
+\begin{enumerate}[(a)]
+
+\item Find 90\% two-sided confidence limits for $\sigma$.\\
+
+\item Find 90\% two-sided confidence limits for the mean response under the conditions of data point \#1.\\
+
+\item Find 90\% two-sided confidence limits for the difference in mean responses under the conditions
+of data points \#1 and \#2.\\
+
+\item Find a $p$-value for testing the hypothesis that the conditions of data points \#1 and \#2 produce
+the same mean response.\\
+
+\item Find 90\% two-sided prediction limits for an additional response for the set of conditions
+$x_1 = 0.005, x_2 = 0.45, x_3 =7, x_4 = 45,$ and $x_5 = 6.$\\
+
+\item Find a $p$-value for testing the hypothesis that a model including only $ x_1, x_3$ and $x_5$ is 
+adequate for ``explaining'' home price. (Hint: write it in the form of $ H_0 \ : \matC \vecBeta = 0$).\\
+\end{enumerate}
+\bigskip
+%----------------------------------------------------------------------------------------
+%	ANSWER TO PROBLEM 2
+%----------------------------------------------------------------------------------------
+\subsubsection*{Answer to Question 2}
+
+\begin{enumerate}[(a)]
+
+\item The \texttt{Boston} dataset contains $n = 506$ observations. Also, rank($X$) = 6. So
+$$\frac{\text{SSE}}{ \sigma^2}  \sim \chi^2_{n - \text{rank(X)}} = \chi^2_{500}.$$
+That is
+$$
+P \left(\frac{\text{SSE}}{\text{upper  0.05 } \text{qt of }\chi^2_{500} }  <  \sigma^2 < \frac{\text{SSE}}{\text{lower  0.05 } \text{qt of }\chi^2_{500}}  \right) = 0.9.
+$$\\
+
+\begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+# after loading the data as in assignment 3, we do:
+# compute sum of squared errors
+beta.hat <- ginv(t(X) %*% X) %*% t(X) %*% Y
+Y.hat <- X %*% beta.hat;  
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat) # ans: 17411.94
+
+# compute the endpoints for the 90% confidence interval
+lower.limit <- SSE / qchisq(0.95, 500)  # ans: 31.4791
+upper.limit <- SSE / qchisq(0.05, 500)  # ans: 38.7667
+\end{lstlisting}
+Thus the 90\% confidence interval for $\sigma$ is:
+$$
+\left(\sqrt{31.4791},  \ \sqrt{38.7667}\right) 
+$$\\
+
+
+\item 
+\item
+\item
+\item
+
+% part (g)
+\item 
+ ----->   COME BACK - RUSULTS LIKELY WRONG!  <-----\\
+
+
+We interpret the hypothesis  ``a model including only $ x_1, x_3$ and $x_5$ is 
+adequate for explaining home price'' as $H_0 \ : \beta_2 = \beta_4 = 0$ and 
+write  $H_0$  in the form $\matC \vecBeta = 0$:  
+$$  
+\begin{bmatrix} 0 & 0 & 1 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix} \beta_0\\
+                             \beta_1\\
+                             \beta_2\\
+                             \beta_3\\
+                             \beta_4 \\
+                             \beta_5
+\end{bmatrix}
+=
+\begin{bmatrix} 0\\
+                             0
+\end{bmatrix}
+$$  
+We have that the following ratio is non-central $F$ distributed
+$$
+F = \frac{\text{SSH}_0 \  / \  2}{ \text{SSE }  / \  500 }
+$$
+
+\begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+C <- matrix( 
+    c(0, 0, 
+      0, 0, 
+      1, 0,
+      0, 0, 
+      0, 1,
+      0, 0),
+    nrow=2, 
+    ncol=6) 
+
+XtXi <- ginv(t(X) %*% X); 
+C.beta.hat <- C %*% beta.hat
+
+# sum of squares under the null (numerator in the F test):
+SSH <- 
+    t(C.beta.hat) %*% ginv((C %*% XtXi %*% t(C))) %*% C.beta.hat
+
+# squared errors (same as in part (a)):
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat) # ans: 17411.94
+sigma.squared <- SSE / 500
+
+# non cenrality parameter for F
+ncp <- (1/2) * (1 / sigma.squared) * SSH
+
+# the F-ratio and the p-value
+F <- (SSH / 2) / (SSE/ 500)
+1 - pf(F, 2, 500, ncp)   #ans: 0.01607116
+\end{lstlisting}
+
+Thus the $p$-value is 0.016. 
+
+\end{enumerate}
+\bigskip
+\bigskip
+%----------------------------------------------------------------------------------------
+%	PROBLEM 3
+%----------------------------------------------------------------------------------------
+\subsection*{Question 3} 
+\begin{enumerate}[(a)]
+\item In the context of Problem 1, part (g), suppose that in fact $\tau_1 = \tau_2, \tau_3 = \tau_4 = \tau_1 - d\sigma$. What is the distribution of the $F$ statistic?\\
+ 
+\item Use \texttt{R} to plot the power of an $\alpha = 0.05$ level test as a function of $d$ for $d \in [-5, 5]$, that is plotting $P(F > \text{the cut-off value})$ against $d$.  The \texttt{R} function \texttt{pf(q, df1, df2, ncp)} will compute cumulative (non-central) $F$ probabilities for you corresponding to the value \texttt{q}, for degrees of
+freedom \texttt{df1} and \texttt{df2} when the non-centrality parameter is \texttt{ncp}.
+\end{enumerate}
+
+\bigskip
+\subsubsection*{Answer to Question 3}
+
+
+\bigskip
+\bigskip
+
+
+
+
+
+
+
+
+
+\end{document}
