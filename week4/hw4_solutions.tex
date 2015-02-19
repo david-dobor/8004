@@ -44,6 +44,7 @@
 \newcommand{\matLambda}{\mathbf{\Lambda}}
 \newcommand{\matSigma}{\mathbf{\Sigma}}
 \newcommand{\vecBeta}{\mathbf{\beta}}
+\newcommand{\vecC}{\mathbf{c}}
 \newcommand{\vecEpsilon}{\mathbf{\epsilon}}
 \newcommand{\vecMu}{\mathbf{\mu}}
 \newcommand{\vecY}{\mathbf{y}}
@@ -236,15 +237,13 @@ $$
  
  \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
 c <- matrix(c(1, 0, 1, 0, 0), 5, 1)
-c.beta.hat <- t(c) %*% beta.hat    #= 4
-
-MSE <- SSE / (n - rank.X)  
-df <- n - rank.X
+c.beta.hat <- t(c) %*% beta.hat #= 4
+MSE <- SSE / df
 
 # 90% two sided confidence interval
-c.beta.hat + 
-    c(-1, 1) * qt(.95, df) * sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
-#ans:  0.7353569 7.2646431
+c.beta.hat +
+    c(-1, 1) * qt(.95, df)* sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
+#ans: 0.7353569 7.2646431
 \end{lstlisting}
 
  The 90\% confidence interval for $\mu + \tau_2$ is given by:
@@ -262,12 +261,12 @@ $$
  
  \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
 c <- matrix(c(0, 1, -1, 0, 0), 5, 1)
-c.beta.hat <- t(c) %*% beta.hat    #= -2.5
+c.beta.hat <- t(c) %*% beta.hat #= -2.5
 
 # 90% two sided confidence interval
-c.beta.hat + 
+c.beta.hat +
     c(-1, 1) * qt(.95, df) * sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
-#ans:  -3.998355  3.998355
+#ans: -3.998355 3.998355
 \end{lstlisting}
 
  The 90\% confidence interval for $\tau_1 - \tau_2$ is given by:
@@ -299,32 +298,80 @@ F = \frac{\text{SSH}_0 \ / 1 }{ \text{SSE }  / \ 2 } = \frac{\text{MSH}_0 }{ \te
 $$
 as follows:
  \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
-c.beta.hat <- c %*% beta.hat    #= -2.5
+# here c and c.beta.hat are the same as in part (c)
 
 # sum of squares under the null (numerator in the F test):
 SSH <- 
-    t(c.beta.hat) %*% ginv( (c %*% XtXi %*% t(c)) )  %*% c.beta.hat
-SSE <- t(Y - Y.hat) %*% (Y - Y.hat) 
+   t(c.beta.hat) %*% ginv( (t(c) %*% XtXi %*% c) ) %*% c.beta.hat
 
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat)
 MSH <- SSH
-MSE <- SSE / (n - rank.X) 
+MSE <- SSE / df
 
-# the F ratio
+# the F ratio:
 F <- MSH / MSE
-
-1 - pf(F, 1, 2)   #ans: 0.2094306
+# the p-value:
+1 - pf(F, 1, 2) #ans: 0.2094306
 \end{lstlisting}
 
 The $p$-value here is \ \fbox{0.2094306}\\
 
 
-\item
-\item
+\item Following the notation used in class, for 10 future observations from the first set of conditions 
+we set $c^T$ to be the first row of $X: \ \vecC^T = (1, 1, 0, 0, 0)$ (thus $\vecC^T \vecBeta$ is 
+clearly estimable), and set $\gamma = 1/10$.  Then var$(y^*) = 1/10$. \\
+
+Thus 
+$$
+\widehat{\vecC^T \vecBeta} - y^* \sim  N \left( 0, \sigma^2 (\gamma + \sigma^2\vecC^T (\matX^T \matX)^- \vecC) \right)
+$$
+
+independently of SSE. 
+
+
+
+
+
+
+The $t$-test is then as follows:\\
+
+ \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+c <- matrix(c(1, 1, 0, 0, 0), 5, 1)
+c.beta.hat <- t(c) %*% beta.hat #= 1.5
+gamma <- 1/10
+MSE <- SSE / df
+
+c.beta.hat + c(-1,1) * qt(.95, df) * sqrt(MSE) *sqrt(gamma + t(c) %*% XtXi %*% c)
+
+# ans: -1.028782  4.028782
+\end{lstlisting}
+
+Thus the 90\% two-sided prediction limits for the sample mean of $10$ future observations from
+the first set of conditions are \fbox{(-1.028782,  4.028782)} \ . \\
+
+
+
+\item For the difference of 2 future values we set $\gamma = 2$ and $\vecC^T = (2, 1, 1, 0, 0)$. The rest
+is similar to part (e), as follows:\\
+ \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+c <- matrix(c(2, 1, 1, 0, 0), 5, 1)
+c.beta.hat <- t(c) %*% beta.hat #= 5.5
+gamma <- 2
+MSE <- SSE / df
+
+c.beta.hat + c(-1,1) * qt(.95, df) * sqrt(MSE) *sqrt(gamma + t(c) %*% XtXi %*% c)
+# ans: -0.607588 11.607588
+\end{lstlisting}
+
+Thus the 90\% two-sided prediction limits for the difference between a pair of future values, one
+from the first set of conditions (i.e. with mean  $\mu + \tau_1$ ) and one from the second set of conditions
+(i.e. with mean  $\mu + \tau_2$) are \fbox{(-0.607588,  11.607588)} \ . \\
+
 
 \item The practical interpretation here is that the effects for groups 2, 3, and 4 (the values $\tau_1, \tau_2, \tau_3$) are not that different 
-from the effect for group 1 ($\tau_1$). 
+from the effect for group 1 (from the value of $\tau_1$). \\
 
-Parts (g) and (h) are similar to (d) and we only present the \texttt{R} code and results.
+Parts (g) and (h) are similar to (d). Results follow in this \texttt{R} code:\\
  \begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
 C <- t(matrix(c(0, 1, -1, 0, 0,
                 0, 1, 0, -1, 0,
