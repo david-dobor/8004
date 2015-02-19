@@ -50,14 +50,14 @@ c.beta.hat <- t(c) %*% beta.hat #= -2.5
 # 90% two sided confidence interval
 c.beta.hat +
     c(-1, 1) * qt(.95, df) * sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
-#ans: -3.998355 3.998355
+#ans: -6.498355  1.498355
 
 
 #------------------------- part (d) -------------------------
 # here c and c.beta.hat are the same as in part (c)
-
 # sum of squares under the null (numerator in the F test):
-SSH <- t(c.beta.hat) %*% ginv( (t(c) %*% XtXi %*% c) ) %*% c.beta.hat
+SSH <- 
+    t(c.beta.hat) %*% ginv( (t(c) %*% XtXi %*% c) ) %*% c.beta.hat
 
 SSE <- t(Y - Y.hat) %*% (Y - Y.hat)
 MSH <- SSH
@@ -68,7 +68,12 @@ F <- MSH / MSE
 # the p-value
 1 - pf(F, 1, 2) #ans: 0.2094306
 
-
+### alternatively, we could use this: 
+t.stat <- c.beta.hat / (sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c))
+p.value <- 2*(1 - pt(abs(t.stat),df))
+###
+# the p.value is the same as with the F-test
+###
 #------------------------- part (e) -------------------------
 c <- matrix(c(1, 1, 0, 0, 0), 5, 1)
 c.beta.hat <- t(c) %*% beta.hat #= 1.5
@@ -96,12 +101,13 @@ C.beta.hat <- C %*% beta.hat
 # sum of squares under the null (numerator in the F test):
 SSH <-
     t(C.beta.hat) %*% ginv( (C %*% XtXi %*% t(C)) ) %*% C.beta.hat
+MSH <- SSH / 3
+
 SSE <- t(Y - Y.hat) %*% (Y - Y.hat)
-MSH <- SSH
 MSE <- SSE / df
 # the F ratio
 F <- MSH / MSE
-1 - pf(F, 1, 2) #ans: 0.0741799
+1 - pf(F, 1, 2) #ans: 0.1835034
 
 
 
@@ -114,8 +120,8 @@ u <- C %*% beta.hat - d
 SSH <-
     t(u) %*% ginv( (C %*% XtXi %*% t(C)) ) %*% u
 SSE <- t(Y - Y.hat) %*% (Y - Y.hat)
-MSH <- SSH
+MSH <- SSH /2 
 MSE <- SSE / df
 # the F ratio
 F <- MSH / MSE
-1 - pf(F, 1, 2) #ans: 0.006715993
+1 - pf(F, 1, 2) #ans: 0.01329846
