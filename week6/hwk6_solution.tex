@@ -1,0 +1,361 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+%\usepackage{palatino}
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{enumerate}
+\usepackage{listings}  % Use this for better code formatting
+%\usepackage{xcolor} 
+\usepackage{graphicx}    
+\usepackage[svgnames]{xcolor} 
+
+%\usepackage{sectsty} % Allows customizing section commands
+%\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+ \usepackage{setspace} 
+ 
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{.1cm plus4mm minus3mm}
+
+
+%--- color definitions for code listings
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+
+% commands I use to typeset matrices in bold
+\newcommand{\matLambda}{\mathbf{\Lambda}}
+\newcommand{\matSigma}{\mathbf{\Sigma}}
+\newcommand{\vecBeta}{\mathbf{\beta}}
+\newcommand{\vecEpsilon}{\mathbf{\epsilon}}
+\newcommand{\vecMu}{\mathbf{\mu}}
+\newcommand{\vecX}{\mathbf{x}}
+\newcommand{\vecY}{\mathbf{y}}
+\newcommand{\matA}{\mathbf{A}}
+\newcommand{\matB}{\mathbf{B}}
+\newcommand{\matC}{\mathbf{C}}
+\newcommand{\matI}{\mathbf{I}}
+\newcommand{\matM}{\mathbf{M}}
+\newcommand{\matP}{\mathbf{P}}
+\newcommand{\matS}{\mathbf{S}}
+\newcommand{\matV}{\mathbf{V}}
+\newcommand{\matQ}{\mathbf{Q}}
+\newcommand{\matX}{\mathbf{X}}
+\newcommand{\matY}{\mathbf{Y}}
+\newcommand{\matW}{\mathbf{W}}
+
+\setcounter{MaxMatrixCols}{20}
+
+%\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+%\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+%\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+%\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+%\textsc{stat 8004} \\ [25pt] 
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge STAT 8004, Assignment 4 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{David Dobor} 
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\lstset{ %
+  language=R,                     % the language of the code
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{WhiteSmoke},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{Gray},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{DarkSlateBlue},      % keyword style
+  commentstyle=\color{ForestGreen},   % comment style
+  stringstyle=\color{mymauve},      % string literal style
+  %escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,det,...}            % if you want to add more keywords to the set
+} 
+
+\renewcommand{\ttdefault}{pcr}  %to be able to use bold fonts in lstlistings code
+
+\begin{document}
+
+\maketitle 
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+\subsection*{Answer to Question 1}
+\begin{itemize}
+\item Let $\alpha_i$ be the fixed effect of the $i^{\text{th}}$ temperature level,  $i = 1, 2, 3$. 
+\item Let $u_{ij}$ be the random effect of the $j^{\text{th}}$ cooler at the  $i^{\text{th}}$ temperature level, $j = 1,2,3,4$.
+\item Let $\epsilon_{ijk}$ be the error associated with the $k^{\text{th}}$ cut for the $j^{\text{th}}$ cooler at the  $i^{\text{th}}$ temperature level,  $k = 1, 2$. 
+\item Let $y_{ijk}$ be the scores assigned by the putative meat scoring experts, with $i, j, k$ in the range just mentioned.
+\end{itemize}
+
+The model is then:
+
+$$
+\begin{bmatrix} 
+y_{1 1 1} \\ y_{1 1 2}\\ 
+y_{1 2 1} \\ y_{1 2 2} \\ 
+y_{1 3 1} \\ y_{1 3 2} \\ 
+y_{1 4 1} \\ y_{1 4 2} \\ 
+y_{2 1 1} \\y_{2 1 2} \\ 
+y_{2 2 1} \\ y_{2 2 2} \\
+y_{2 3 1} \\ y_{2 3 2} \\ 
+y_{2 4 1} \\ y_{2 4 2} \\ 
+y_{3 1 1} \\y_{3 1 2} \\ 
+y_{3 2 1} \\ y_{3 2 2} \\
+y_{3 3 1} \\ y_{3 3 2} \\ 
+y_{3 4 1} \\ y_{3 4 2} 
+\end{bmatrix}
+=
+\begin{bmatrix} 1 & 1 & 0 & 0 \\
+                             1 & 1 & 0 & 0 \\
+                             1 & 1 & 0 & 0 \\
+                             1 & 1 & 0 & 0 \\
+                             1 & 1 & 0 & 0 \\
+                             1 & 1 & 0 & 0 \\
+                             1 & 1 & 0 & 0 \\
+                             1 & 1 & 0 & 0 \\
+                             1 & 0 & 1 & 0 \\
+                             1 & 0 & 1 & 0 \\
+                             1 & 0 & 1 & 0 \\
+                             1 & 0 & 1 & 0 \\
+                             1 & 0 & 1 & 0 \\
+                             1 & 0 & 1 & 0 \\
+                             1 & 0 & 1 & 0 \\
+                             1 & 0 & 1 & 0 \\
+                             1 & 0 & 0 & 1 \\
+                             1 & 0 & 0 & 1 \\
+                             1 & 0 & 0 & 1 \\
+                             1 & 0 & 0 & 1 \\
+                             1 & 0 & 0 & 1 \\
+                             1 & 0 & 0 & 1 \\
+                             1 & 0 & 0 & 1 \\
+                             1 & 0 & 0 & 1 
+\end{bmatrix}
+\begin{bmatrix} 
+\mu \\ \alpha_1\\ \alpha_2 \\ \alpha_3
+\end{bmatrix}
++
+\begin{bmatrix} 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+                             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix} 
+u_{11}  \\ u_{12} \\ u_{13}  \\ u_{14}  \\ u_{21}  \\ u_{22}  \\ u_{23} \\ u_{24} \\ u_{31}  \\ u_{32}  \\ u_{33} \\ u_{34} 
+\end{bmatrix}
++ 
+\begin{bmatrix} 
+\epsilon_{1 1 1} \\ \epsilon_{1 1 2}\\ 
+\epsilon_{1 2 1} \\ \epsilon_{1 2 2} \\ 
+\epsilon_{1 3 1} \\ \epsilon_{1 3 2} \\ 
+\epsilon_{1 4 1} \\ \epsilon_{1 4 2} \\ 
+\epsilon_{2 1 1} \\\epsilon_{2 1 2} \\ 
+\epsilon_{2 2 1} \\ \epsilon_{2 2 2} \\
+\epsilon_{2 3 1} \\ \epsilon_{2 3 2} \\ 
+\epsilon_{2 4 1} \\ \epsilon_{2 4 2} \\ 
+\epsilon_{3 1 1} \\\epsilon_{3 1 2} \\ 
+\epsilon_{3 2 1} \\ \epsilon_{3 2 2} \\
+\epsilon_{3 3 1} \\ \epsilon_{3 3 2} \\ 
+\epsilon_{3 4 1} \\ \epsilon_{3 4 2} 
+\end{bmatrix}
+.
+$$\\
+
+Or, to be a bit more space-saving about the whole thing, 
+$$
+y_{ijk} = \mu + \alpha_i + u_{ij} +\epsilon_{ijk} \ \ \ \text{for } 1 \leq i \leq 3, 1 \leq j \leq 4, 1 \leq k \leq 2.
+$$ 
+
+
+\bigskip
+\bigskip
+%----------------------------------------------------------------------------------------
+%	PROBLEM 2
+%----------------------------------------------------------------------------------------
+\subsection*{Question 2}
+The model $\vecY = \matX \vecMu + \vecEpsilon$ here is 
+$$
+\begin{bmatrix} 
+y_{1 } \\
+y_{2} \\
+y_{3} 
+\end{bmatrix}
+= 
+\begin{bmatrix} 1 & 0\\
+			     1 & 0\\
+		 	     0 & 1\\
+\end{bmatrix}
+\begin{bmatrix} 
+\mu_{1 } \\
+\mu_{2} 
+\end{bmatrix}
++
+\begin{bmatrix} 
+\epsilon_{1 } \\
+\epsilon_{2} \\
+\epsilon_{3} 
+\end{bmatrix}
+$$
+With the covariance matrix
+$$
+\matSigma 
+= \sigma^2 
+\begin{bmatrix} 1 & 1/2 & 0\\
+			     1/2 & 1 & 1/2\\
+		 	     0 & 1/2 & 1\\
+\end{bmatrix}
+$$
+We see that 
+$$
+\text{rank}(X) = 2, \ \ \ \text{ so that } \ \ \ n - \text{rank}(X) = 3 - 2 = 1
+$$\\
+Consider then the following matrix $\matB$ that satisfies $\matB \; \matX = 0$, with $\text{rank}(\matB) = 1$:
+$$
+\matB = (1, -1, 0)
+$$
+
+
+
+Then, according to the discussion at the end of lecture 6\footnote{
+For the choice of $\matM$ also discussed in the lecture, we could compute the projection matrices:
+$$
+\matP_X = 
+\begin{bmatrix} 1/2 & 1/2 & 0\\
+			     1/2 & 1/2 & 0\\
+		 	     0 & 0 & 1\\
+\end{bmatrix}
+$$
+$$
+\matI - \matP_X = 
+\begin{bmatrix} 1/2 & -1/2 & 0\\
+			     -1/2 & 1/2 & 0\\
+		 	     0 & 0 & 0\\
+\end{bmatrix}
+$$
+$$
+\matM = (1, -1, 0)
+$$
+Then
+$$
+\matM (\matI - \matP_X) \vecY =
+ (1, -1, 0)
+ \begin{bmatrix} 1/2 & -1/2 & 0\\
+			     -1/2 & 1/2 & 0\\
+		 	     0 & 0 & 0\\
+\end{bmatrix}
+\vecY
+= 
+\matB \vecY =
+ (1, -1, 0) 
+ \begin{bmatrix} y_1\\
+			     y_2\\
+		 	     y_3 
+\end{bmatrix}
+ = y_1 - y_2
+$$
+
+}, 
+$\matB \, \vecY =  (1, -1, 0)
+\begin{bmatrix} y_1\\
+			     y_2\\
+		 	     y_3 
+\end{bmatrix} =
+y_1 - y_2 $ will be normally distributed with:
+\begin{align*}
+\matB \, \vecY   &\sim \mathcal{N}(\ 0, \ \matB \, \matSigma \, \matB^T \ )\\
+ &\sim \mathcal{N}\Big(\ 0,  \ \sigma^2 
+ (1, -1, 0)
+\begin{bmatrix} 1 & 1/2 & 0\\
+			     1/2 & 1 & 1/2\\
+		 	     0 & 1/2 & 1\\
+\end{bmatrix}
+\begin{bmatrix} 1\\
+			     -1\\
+		 	     0 
+\end{bmatrix} \ \Big)\\
+ &\sim \mathcal{N} (\ 0, \ \sigma^2 \ )
+\end{align*}
+
+Thus
+\begin{center}
+\boxed{
+$$
+y_1 - y_2 \sim \mathcal{N}(\ 0, \ \sigma^2 \ )
+$$
+}
+\end{center}
+\bigskip
+\bigskip
+Now compute the log-likelihood and maximize it by setting its derivative with respect to $\sigma^2$ to zero:
+
+\begin{align*}
+l(\sigma^2) &= -\frac{1}{2} \log(2 \pi) -\frac{1}{2} \log(\sigma^2) -\frac{1}{2} \frac{1}{\sigma^2} (y_1 - y_2)^2\\
+\frac{d (l(\sigma^2) )} {d \sigma^2} &=  -\frac{1}{2 \sigma^2} + \frac{1}{2 \sigma^4} (y_1 - y_2)^2 = 0\\
+\end{align*}
+Therefore
+\begin{center}
+\boxed{
+$$
+\hat \sigma^2 = (y_1 - y_2)^2 
+$$
+}
+\end{center}
+
+\end{document}

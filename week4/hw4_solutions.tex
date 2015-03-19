@@ -715,13 +715,238 @@ ggsave(file="power.png")
 
 \end{enumerate}
 
-\bigskip
-\bigskip
+
+\pagebreak
+\section*{Appendix}
+
+Code used to obtain results for this assignment follows.\\
+
+\begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+# question 1
+library(MASS)
+
+# data given for problem 2, previous assignment
+X <- matrix( 
+    c(1, 1, 1, 1, 1, 1, 
+      1, 1, 0, 0, 0, 0,
+      0, 0, 1, 0, 0, 0,
+      0, 0, 0, 1, 0, 0, 
+      0, 0, 0, 0, 1, 1 ), 
+    nrow=6, 
+    ncol=5) 
+
+Y <- matrix(c(2, 1, 4, 6, 3, 5), 6, 1)
+
+
+# compute some useful quantities used later
+XtXi <- ginv(t(X) %*% X) 
+n = 6 
+df = n - qr(X)$rank  #degrees of freedom (used in tests below)
+beta.hat <- XtXi %*% t(X) %*% Y
+Y.hat <- X %*% beta.hat; 
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat) # ans: 2.5
+
+
+#------------------------- part (a) -------------------------
+# compute the endpoints for the 90% confidence interval
+lower.limit <- SSE / qchisq(0.95, 2)  # ans: 0.4172603
+upper.limit <- SSE / qchisq(0.05, 2)  # ans: 24.36966
+
+c(sqrt(lower.limit), sqrt(upper.limit))
+#ans: 0.6459568 4.9365633
+
+
+#------------------------- part (b) -------------------------
+c <- matrix(c(1, 0, 1, 0, 0), 5, 1)
+c.beta.hat <- t(c) %*% beta.hat #= 4
+MSE <- SSE / df
+
+# 90% two sided confidence interval
+c.beta.hat +
+    c(-1, 1) * qt(.95, df)* sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
+#ans: 0.7353569 7.2646431
+
+
+#------------------------- part (c) -------------------------
+c <- matrix(c(0, 1, -1, 0, 0), 5, 1)
+c.beta.hat <- t(c) %*% beta.hat #= -2.5
+
+# 90% two sided confidence interval
+c.beta.hat +
+    c(-1, 1) * qt(.95, df) * sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
+#ans: -6.498355  1.498355
+
+
+#------------------------- part (d) -------------------------
+# here c and c.beta.hat are the same as in part (c)
+# sum of squares under the null (numerator in the F test):
+SSH <- 
+    t(c.beta.hat) %*% ginv( (t(c) %*% XtXi %*% c) ) %*% c.beta.hat
+
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat)
+MSH <- SSH
+MSE <- SSE / df
+
+# the F ratio
+F <- MSH / MSE
+# the p-value
+1 - pf(F, 1, 2) #ans: 0.2094306
+
+### alternatively, we could use this: 
+t.stat <- c.beta.hat / (sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c))
+p.value <- 2*(1 - pt(abs(t.stat),df))
+###
+# the p.value is the same as with the F-test
+###
+#------------------------- part (e) -------------------------
+c <- matrix(c(1, 1, 0, 0, 0), 5, 1)
+c.beta.hat <- t(c) %*% beta.hat #= 1.5
+gamma <- 1/10
+MSE <- SSE / df
+
+c.beta.hat + c(-1,1) * qt(.95, df) * sqrt(MSE) *sqrt(gamma + t(c) %*% XtXi %*% c)
+# ans: -1.028782  4.028782
+
+
+#------------------------- part (f) -------------------------
+c <- matrix(c(2, 1, 1, 0, 0), 5, 1)
+c.beta.hat <- t(c) %*% beta.hat #= 5.5
+gamma <- 2
+MSE <- SSE / df
+
+c.beta.hat + c(-1,1) * qt(.95, df) * sqrt(MSE) *sqrt(gamma + t(c) %*% XtXi %*% c)
+# ans: -0.607588 11.607588
+
+#------------------------- part (g) -------------------------
+C <- t(matrix(c(0, 1, -1, 0, 0,
+                0, 1, 0, -1, 0,
+                0, 1, 0, 0, -1), nrow=5, ncol=3))
+C.beta.hat <- C %*% beta.hat
+# sum of squares under the null (numerator in the F test):
+SSH <-
+    t(C.beta.hat) %*% ginv( (C %*% XtXi %*% t(C)) ) %*% C.beta.hat
+MSH <- SSH / 3
+
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat)
+MSE <- SSE / df
+# the F ratio
+F <- MSH / MSE
+1 - pf(F, 1, 2) #ans: 0.1835034
 
 
 
+#------------------------- part (h) -------------------------
+C <- t(matrix(c(0, 1, -1, 0, 0,
+                0, 0, 1, -1, 0), nrow=5, ncol=2))
+d <- matrix(c(10,0))
+u <- C %*% beta.hat - d
+# sum of squares under the null (numerator in the F test):
+SSH <-
+    t(u) %*% ginv( (C %*% XtXi %*% t(C)) ) %*% u
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat)
+MSH <- SSH /2 
+MSE <- SSE / df
+# the F ratio
+F <- MSH / MSE
+1 - pf(F, 1, 2) #ans: 0.01329846
+\end{lstlisting}
+
+\pagebreak
 
 
+\begin{lstlisting}[basicstyle=\ttfamily\small\bfseries]
+# assignment 4, problem 2
+library(MASS)
+data(Boston)
+
+Y=as.matrix(Boston$medv)
+X=as.matrix(Boston[,c('crim','nox','rm','age','dis')])
+X=cbind(rep(1,dim(Boston)[1]),X)
+
+# some preliminary quantities useful in what follows:
+XtXi <- ginv(t(X) %*% X) 
+n <- dim(X)[1]         # 506 observations
+df <- n - qr(X)$rank   # 500 degrees of freedom
+beta.hat <- XtXi %*% t(X) %*% Y
+Y.hat <- X %*% beta.hat; 
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat)  # ans: 17411.94
+MSE <- SSE / df                      # ans: 34.82387
+
+#------------------------- part (a) -------------------------
+# compute the endpoints for the 90% confidence interval
+lower.limit <- SSE / qchisq(0.95, 500)  # ans: 31.4791
+upper.limit <- SSE / qchisq(0.05, 500)  # ans: 38.7667
+
+c(sqrt(lower.limit), sqrt(upper.limit))
+# ans: 5.610624 6.226291
+
+#------------------------- part (b) -------------------------
+c <- X[1,]   # data point # 1: first row
+c.beta.hat <- t(c) %*% beta.hat # ans: 25.70437
+
+# 90% two sided confidence interval
+c.beta.hat +
+    c(-1, 1) * qt(.95, df)* sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
+
+# ans: 25.21142 26.19733
+
+
+#------------------------- part (c) -------------------------
+c <- X[1,] - X[2,]   # data point # 1: first row - second row
+c.beta.hat <- t(c) %*% beta.hat #
+
+# 90% two sided confidence interval
+c.beta.hat +
+    c(-1, 1) * qt(.95, df)* sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c)
+
+# ans: 1.202479 2.612541
+
+
+#------------------------- part (d) -------------------------
+# here c and c.beta.hat are the same as in part (c)
+c <- X[1,] - X[2,]   # data point # 1: first row - second row
+c.beta.hat <- t(c) %*% beta.hat 
+
+# two sided t-test
+p.value <- 2*(1 - pt(abs(c.beta.hat / (sqrt(MSE) * sqrt(t(c) %*% XtXi %*% c))),df))
+# ans: 1.019758e-05
+
+
+#------------------------- part (e) -------------------------
+c <- c(1, 0.005, 0.45, 7, 45, 6)
+se <- sqrt(MSE)*sqrt(1 + c %*% XtXi %*% c)   #ans: 5.917394
+c.beta.hat <- t(c) %*% beta.hat 
+
+c.beta.hat + c(-1, 1) * qt(.95, df) * se
+# ans: 19.90023 39.40286
+
+
+#------------------------- part (f) -------------------------
+C <- matrix( 
+    c(0, 0, 
+      0, 0, 
+      1, 0,
+      0, 0, 
+      0, 1,
+      0, 0),
+    nrow=2, 
+    ncol=6) 
+
+XtXi <- ginv(t(X) %*% X); 
+C.beta.hat <- C %*% beta.hat
+
+# sum of squares under the null (numerator in the F test):
+SSH <- 
+    t(C.beta.hat) %*% ginv( (C %*% XtXi %*% t(C)) )  %*% C.beta.hat
+
+# squared errors (same as before, part (a) denominator in the F test):
+SSE <- t(Y - Y.hat) %*% (Y - Y.hat) # ans: 17411.94
+MSE <- SSE / df
+
+# the F-ratio and the p-value
+F <- (SSH / 2) / MSE
+1 - pf(F, 2, 500)   #ans: 3.190781e-13
+\end{lstlisting}
 
 
 
