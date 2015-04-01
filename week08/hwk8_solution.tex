@@ -1,0 +1,322 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+%\usepackage{palatino}
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{enumerate}
+\usepackage{listings}  % Use this for better code formatting
+%\usepackage{xcolor} 
+\usepackage{graphicx}    
+\usepackage[svgnames]{xcolor} 
+
+\usepackage{pdfpages} %Alows inclusion of external pdf files
+\usepackage{float}  %fix table in position
+
+%\usepackage{sectsty} % Allows customizing section commands
+%\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+ \usepackage{setspace} 
+ 
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{.1cm plus4mm minus3mm}
+
+
+%--- color definitions for code listings
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+
+% commands I use to typeset matrices in bold
+\newcommand{\matLambda}{\mathbf{\Lambda}}
+\newcommand{\matSigma}{\mathbf{\Sigma}}
+\newcommand{\vecBeta}{\mathbf{\beta}}
+\newcommand{\vecEpsilon}{\mathbf{\epsilon}}
+\newcommand{\vecMu}{\mathbf{\mu}}
+\newcommand{\vecX}{\mathbf{x}}
+\newcommand{\vecY}{\mathbf{y}}
+\newcommand{\matA}{\mathbf{A}}
+\newcommand{\matB}{\mathbf{B}}
+\newcommand{\matC}{\mathbf{C}}
+\newcommand{\matI}{\mathbf{I}}
+\newcommand{\matM}{\mathbf{M}}
+\newcommand{\matP}{\mathbf{P}}
+\newcommand{\matS}{\mathbf{S}}
+\newcommand{\matV}{\mathbf{V}}
+\newcommand{\matQ}{\mathbf{Q}}
+\newcommand{\matX}{\mathbf{X}}
+\newcommand{\matY}{\mathbf{Y}}
+\newcommand{\matW}{\mathbf{W}}
+
+\setcounter{MaxMatrixCols}{20}
+
+%\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+%\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+%\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+%\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+%\textsc{stat 8004} \\ [25pt] 
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge STAT 8004, Assignment 8 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{David Dobor} 
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\lstset{ %
+  language=R,                     % the language of the code
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{WhiteSmoke},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{Gray},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{DarkSlateBlue},      % keyword style
+  commentstyle=\color{ForestGreen},   % comment style
+  stringstyle=\color{mymauve},      % string literal style
+  %escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,det,...}            % if you want to add more keywords to the set
+} 
+
+\renewcommand{\ttdefault}{pcr}  %to be able to use bold fonts in lstlistings code
+
+\begin{document}
+
+\maketitle 
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+\subsection*{Answer to Question 1}
+
+The problem data:\\
+\begin{itemize}
+\item 
+\end{itemize}
+
+\bigskip
+\bigskip
+%----------------------------------------------------------------------------------------
+%	PROBLEM 2
+%----------------------------------------------------------------------------------------
+\subsection*{Answer to Question 2}
+
+In this model, for the  $k^{\text{th}}$ piece of the  $j^{\text{th}}$ roll on the  $i^{\text{th}}$ machine we have
+$$
+y_{ijk} = \mu + \alpha_i + u_{ij} + \epsilon_{ijk},
+$$
+where all effects except $\mu$ are random.\\ 
+
+This is a \emph{nested} model where $j^{\text{th}}$ piece of roll is nested in the  $i^{\text{th}}$ machine.\\
+
+We have $a = 3$ machines (indexed by $i$), $b = 5$ rolls (indexed by $j$) from each machine, and $c = 5$ pieces (indexed by $k$) from each roll:\\
+\begin{table}[H]
+\caption{Data for Question 2, Notation Used} % title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c c } % centered columns (4 columns)
+\hline\hline %inserts double horizontal lines
+Source & SS & df  & ( notation for \texttt{df} ) & Mean Squares\\ [0.5ex] % inserts table
+%heading
+\hline % inserts single horizontal line
+Machines & 1966 & $3 - 1 = 2$ & $ = a - 1$ & 1966/2 = 983 = MSA\\ 
+Rolls & 644 & $3\cdot(5-1) = 12$  & $ = a(b - 1)$ & 644/12 = 53.667 = MSB(A)\\
+Pieces & 280 & $3\cdot5\cdot(5-1) = 60$ & $ = a b (c - 1)$& 280/60 = 4.667 = MSE\\ [0.5ex]
+\hline
+Total & 2890 & 74  & $abc - 1$\\ [1ex] % [1ex] adds vertical space
+\hline %inserts single line
+\end{tabular}
+\label{table:nonlin} % is used to refer this table in the text
+\end{table}
+
+
+\begin{enumerate}[(a)]
+\item  Based on the lecture, we know the following to be true (page 3, lecture 8):
+\begin{align*} 
+ \mathbf{E}\  (\text{MSE}) &= \sigma^2_\epsilon\\ 
+\mathbf{E}\  (\text{MSB(A)})  &= \sigma^2_\epsilon + 5 \cdot \sigma^2_u \\
+\mathbf{E}\  (\text{MSA})  &= \sigma^2_\epsilon + 5 \cdot \sigma^2_u + 5\cdot 5 \cdot \sigma^2_\alpha
+\end{align*}
+
+Based on these we obtain the \emph{estimates of the variance components:}
+
+\begin{align*} 
+\hat \sigma^2_\epsilon &=  4.667\\ 
+\hat \sigma^2_u &= \frac{1}{5} (53.667 - 4.667) = 9.8\\
+\hat \sigma^2_\alpha &= \frac{1}{25} (983 - 53.667) = 37.1733
+\end{align*}
+
+\item 
+\begin{itemize}
+\item 95\% Confidence Interval for $\sigma^2_\epsilon:$\\
+
+We make use of the fact that $\frac{60 \cdot \texttt{MSE}}{\sigma^2_\epsilon}$ is $\chi^2$ distributed with $60$ degrees of freedom, and compute the 95\% confidence limits for $\sigma^2_\epsilon$:\\
+\begin{verbatim}
+SSE <- 280
+alpha <- .05
+lower.limit <- SSE / qchisq(1 - alpha/2, df=60)
+upper.limit <- SSE / qchisq(alpha/2, df=60)
+CI_error <- sqrt(c(lower.limit, upper.limit))
+\end{verbatim}
+\bigskip
+
+Thus:
+$$
+ \boxed{\text{95\% Confidence Interval for } \sigma_\epsilon = ( 1.833423,  2.629961 )}
+$$
+
+\bigskip
+\item 95\% Confidence Interval for $\sigma^2_u:$\\
+
+We first  use the Cochran -- Saterthwaite procedure to compute the needed degrees of freedom.  Using the results in part a, we have:
+$$
+\hat \nu = \frac{ (\hat \sigma^2_u)^2 }{ \frac{(\text{MSB(A)} / 5)^2}{12} + \frac{(-\text{MSE}/5)^2}{60} } = 9.988675
+$$
+The computation of confidence limits is similar to the one shown above, where this $
+\hat \nu$ is used for the degrees of freedom for the relevant $\chi^2$ distribution. \\
+
+The full \texttt{R} script that was used to obrain the results is attached in the appendix.\\
+
+Thus:
+$$
+ \boxed{\text{95\% Confidence Interval for } \sigma_u = ( 2.186967, 5.496051)}
+$$
+\bigskip
+\item 95\% Confidence Interval for $\sigma^2_\alpha:$\\
+We do a computation similar to the above. For the degrees of freedom we use:
+$$
+\hat \nu = \frac{ (\hat \sigma^2_\alpha)^2 }{  \frac{(\text{MSA}/25)^2}{2} + \frac{(-\text{MSB(A)} / 25)^2}{12} } = 1.786695
+$$
+
+Thus:
+$$
+ \boxed{\text{95\% Confidence Interval for } \sigma_\alpha = (3.097864, 46.297890)}
+$$
+\end{itemize}
+\bigskip
+
+
+\item The 95\% Confidence Interval for $\mu$ is
+$$
+\left( \ \bar y_{...} - \text{\texttt{qt(0.975,df=2)}} \sqrt{MSA / 75}, \ \  \bar y_{...} + \text{\texttt{qt(0.975,df=2)}} \sqrt{MSA / 75} \ \right)
+$$
+Which, given $\bar y_{...} = 1/75 \  \sum_{ijk} y_{ijk} = 35$ and MSA from the table, is:
+$$
+ \boxed{\text{95\% Confidence Interval for } \mu = (19.42305, 50.57695)}
+$$
+\end{enumerate}
+\pagebreak
+\section{Appendix}
+\begin{verbatim}
+
+################################################################
+########################## Question 2 ##########################
+################################################################
+# from the table:
+MSE <- 280/60
+MSB_A <- 644/12
+MSA <- 1966/2
+
+############################ part(a)############################
+sigma2_c <- MSE                   # ans: 4.666667
+sigma2_u <- 1/5 * (MSB_A - MSE)   # ans: 9.8
+sigma2_a <- 1/25 * (MSA - MSB_A)  # ans: 37.17333
+
+############################ part(b)############################
+# for sigma2_c:
+alpha <- .05
+lower.limit <- 60 * MSE / qchisq(1 - alpha/2, df=60)
+upper.limit <- 60 * MSE / qchisq(alpha/2, df=60)
+CI_error <- sqrt(c(lower.limit, upper.limit))
+
+# for sigma2_u:
+v <- (sigma2_u)^2 / ( ((-MSE/5)^2 / 60)  + (MSB_A/5)^2 / 12 )
+lower.limit <- (v*sigma2_u) / qchisq(1 - alpha/2, df=v)
+upper.limit <- (v*sigma2_u)/ qchisq(alpha/2, df=v)
+CI_u <- sqrt(c(lower.limit, upper.limit))
+
+# for sigma2_a:
+v <- (sigma2_a)^2 / ( ((MSA/25)^2 / 2)  + (-MSB_A/25)^2 / 12 )
+lower.limit <- (v*sigma2_a) / qchisq(1 - alpha/2, df=v)
+upper.limit <- (v*sigma2_a)/ qchisq(alpha/2, df=v)
+CI_a <- sqrt(c(lower.limit, upper.limit))
+
+############################ part(c)############################
+# 95\% Confidence Interval for \mu:
+qt(0.975,df=2)
+CI_mu <- c( 35 - qt(0.975,df=2) * sqrt( MSA / 75 ), 35 + qt(0.975,df=2) * sqrt( MSA / 75 ))
+CI_mu
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{verbatim}
+
+
+%
+%The following is a representation of the data for this problem:
+%\includepdf[pages={1}]{Quest2DataRepresentation.pdf} 
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
